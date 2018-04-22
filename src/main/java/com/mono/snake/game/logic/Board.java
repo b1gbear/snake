@@ -23,16 +23,21 @@ import java.util.List;
 public class Board {
 
 
-    final BoardState state;
+    /**
+     * Board State
+     */
+    private final BoardState state;
 
-    final KeyboardState keysOne;
+    /**
+     * KeyboardState for Player 1
+     */
+    private final KeyboardState keysOne;
 
-    final KeyboardState keysTwo;
+    /**
+     * KeyboardState for Player 2
+     */
+    private final KeyboardState keysTwo;
 
-
-    public BoardState getState() {
-        return state;
-    }
 
     public Board(BoardState boardStatea) {
         this.state = boardStatea;
@@ -317,6 +322,11 @@ public class Board {
             }
         }
         return fruits;
+    }
+
+
+    public BoardState getState() {
+        return state;
     }
 
     public KeyboardState getKeysOne() {
