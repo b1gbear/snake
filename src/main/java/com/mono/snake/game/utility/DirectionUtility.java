@@ -2,6 +2,7 @@ package com.mono.snake.game.utility;
 
 import com.mono.snake.game.entity.Point;
 import com.mono.snake.game.entityEnum.DirectionEnum;
+import com.mono.snake.game.entityEnum.KeyEnum;
 
 public class DirectionUtility {
     public static Point directionToVector(DirectionEnum directionEnum) {
@@ -37,4 +38,22 @@ public class DirectionUtility {
         return DirectionEnum.NONE;
 
     }
+
+    /**
+     * Key to direction
+     * @return Direction
+     */
+    public static DirectionEnum keyToDirection(KeyEnum keyEnum) {
+        if(keyEnum == KeyEnum.DOWN) {
+            return DirectionEnum.DOWN;
+        }else if (keyEnum == KeyEnum.UP){
+            return DirectionEnum.UP;
+        }else if (keyEnum == KeyEnum.RIGHT) {
+            return DirectionEnum.RIGHT;
+        }else if (keyEnum == KeyEnum.LEFT) {
+            return DirectionEnum.LEFT;
+        }
+        return DirectionEnum.NONE;
+    }
+
 }

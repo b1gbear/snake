@@ -3,16 +3,18 @@ package com.mono.snake.game.logic;
 import com.mono.snake.game.entity.Fruit;
 import com.mono.snake.game.entity.Point;
 import com.mono.snake.game.entity.Snake;
-import com.mono.snake.game.entityEnum.CollisionEnum;
-import com.mono.snake.game.entityEnum.DirectionEnum;
-import com.mono.snake.game.entityEnum.GameState;
+import com.mono.snake.game.entityEnum.*;
+import com.mono.snake.game.logic.entity.BoardState;
+import com.mono.snake.game.logic.entity.GameSettings;
+import com.mono.snake.game.logic.entity.KeyboardState;
+import com.mono.snake.game.logic.entity.LostState;
 import com.mono.snake.game.snake_consciousness.SnakeConsciousness;
-import com.mono.snake.game.snake_consciousness.SnakeConsciousnessImpl;
+import com.mono.snake.game.snake_consciousness.SnakeConsciousnessAI;
+import com.mono.snake.game.snake_consciousness.SnakeConsciousnessPlayer;
 import com.mono.snake.game.utility.DirectionUtility;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,202 +22,226 @@ import java.util.List;
  */
 public class Board {
 
-    /**
-     * My snake
-     */
-    private Snake snake;
-    /**
-     * All snakes
-     */
-    private LinkedList<SnakeConsciousness> snakeConsciousnesses;
 
-    /**
-     * Fruits
-     */
-    private LinkedList<Fruit> fruits;
+    final BoardState state;
 
-    /**
-     * Board size ranges from from 0...to N-1
-     */
-    private Point boardSize;
+    final KeyboardState keysOne;
 
-    /**
-     * Current direction of snake
-     */
-    private DirectionEnum directionEnum;
+    final KeyboardState keysTwo;
 
 
-    /**
-     * Current game state
-     */
-    private GameState gameState;
+    public BoardState getState() {
+        return state;
+    }
 
-
-    private static final int FRUIT_INTERVAL = 2;
-
-
-    private static final int NORMAL_SPEED = 100;
-
-    // Turbo settings
-    private static final int TURBO_SPEED = 60;
-
-    private static final int TURBO_TIMEOUT = 1000;
-
-    private static final double TURBO_CONSUME_PER_SECOND = 0.5;
-
-    private  long  previousSpeed = NORMAL_SPEED;
-
-    private long turboRequest = 0;
-    private long lastTurbo = 0;
-
-    private DirectionEnum previousDirection;
-
-    private double turboPenalty = 0;
-    /**
-     * Board constructor
-     *
-     * @param boardSize size of board
-     */
-    public Board(Point boardSize) {
-        this.boardSize = boardSize;
-        startNewGame();
+    public Board(BoardState boardStatea) {
+        this.state = boardStatea;
+        this.keysOne = new KeyboardState();
+        this.keysTwo = new KeyboardState();
     }
 
 
-    public void  startNewGame()
-    {
-        clean();
+    public void startNewGame(GameTypre gameType) {
+        state.setGameState(GameState.GAME);
+        state.reset(gameType);
         addAI();
-        setGameState(GameState.GAME);
-        this.turboRequest = -100 *TURBO_TIMEOUT;
-    }
-
-
-    /**
-     * Clean state of game
-     */
-    public void clean() {
-        this.snake = new Snake(new Point(boardSize.getX() / 2, boardSize.getY() / 2));
-        this.snakeConsciousnesses = new LinkedList<>();
-        this.fruits = new LinkedList<>();
-        this.directionEnum = DirectionEnum.RIGHT;
-        this.previousDirection = DirectionEnum.RIGHT;
-
     }
 
 
     public void addAI() {
         for (int i = 0; i < 5; i++) {
-            this.snakeConsciousnesses.add(new SnakeConsciousnessImpl(new Snake(new Point(i, i))));
+            this.state.getBots().add(new SnakeConsciousnessAI(new Snake(new Point(i, i))));
         }
-
     }
-
 
     /**
      * Executes one games tick
      */
     public void tick(Long timestamp) {
-        if(snake.getSize() > 1)
-             previousDirection = filterAgainstPrevious(directionEnum);
-        else
-            previousDirection = directionEnum;
-
-        Point point = DirectionUtility.directionToVector(previousDirection);
-
-        long speed = Math.max(getSpeed(timestamp),snake.getSize() <= 1?NORMAL_SPEED:TURBO_SPEED);
-
-
-        if(previousSpeed == TURBO_SPEED && speed == TURBO_SPEED)
-        {
-            turboPenalty += (timestamp - lastTurbo);
-        }
-
-        while(snake.getSize() >1 && turboPenalty > TURBO_CONSUME_PER_SECOND*1000 ) {
-            snake.decrementSize(1);
-            turboPenalty -= TURBO_CONSUME_PER_SECOND * 1000;
-        }
-
-        previousSpeed = speed;
-
-        if(speed == TURBO_SPEED)
-        {
-            lastTurbo = timestamp;
-        }
-
-        if(snake.getNextTick() < timestamp)
-        {
-            snake.moveTowardsVector(point);
-            snake.setNextTick(timestamp+speed);
-        }
-
-        if (snakeCrossesBoard(snake)) {
-            gameState = GameState.LOST;
-            return;
-        }
-
-        iCrossedOtherSnake(snake);
-
+        iKeyboardMove();
+        iSnakeMove(timestamp);
+        iCrossedBoard();
+        iCrossedOtherSnake();
         AIsnakesDecide(timestamp);
+        AIanyOfConsiousnessLost();
         AIsnakesCrossEachOtherOrMe();
         anyOfSnakesEats();
-        AIanyOfConsiousnessLost();
     }
 
-    private void iCrossedOtherSnake(Snake snake) {
-        for (SnakeConsciousness snakeConsciousness :
-                snakeConsciousnesses) {
-            if (snakeConsciousness.getSnake().colidesWithPoint(snake.getLocation()) == CollisionEnum.TAIL) {
-                setGameState(GameState.LOST);
+    private void iKeyboardMove() {
+
+        if(GameTypre.SINLE == state.getGameType())
+        {
+            KeyboardState keyboardState = keysOne.getTickSet() > keysTwo.getTickSet() ? keysOne : keysTwo;
+            SnakeConsciousnessPlayer player = state.getPlayers().get(0);
+
+            if(player.getId() == 1)
+            {
+                player.setDirection(keyboardState.getDirection());
+                player.getTurboData().setTurboRequest(keyboardState.getTurboRequestedAt());
+            }
+
+        }else
+        {
+            for (SnakeConsciousnessPlayer player:
+                 state.getPlayers()) {
+
+                if(player.getId() == 1)
+                {
+                    player.setDirection(keysOne.getDirection());
+                    player.getTurboData().setTurboRequest(keysOne.getTurboRequestedAt());
+                }else
+                {
+                    player.setDirection(keysTwo.getDirection());
+                    player.getTurboData().setTurboRequest(keysTwo.getTurboRequestedAt());
+                }
+
+            }
+        }
+    }
+
+    private void iSnakeMove(long timestamp) {
+
+        for (SnakeConsciousnessPlayer snakeMe : state.getPlayers()) {
+            if(snakeMe.getNextTick() > timestamp){
+                snakeMe.move(state);
+                long tick = snakeMe.getSpeed(timestamp) == MovementType.Turbo ? GameSettings.TURBO_SPEED : GameSettings.NORMAL_SPEED;
+                snakeMe.setNextTick(tick);
             }
         }
 
     }
 
+    private void iCrossedBoard() {
+        List<SnakeConsciousnessPlayer> toRemove = new ArrayList<>();
+        Iterator<SnakeConsciousnessPlayer> snakeConsciousnessPlayerIterator = state.getPlayers().iterator();
+        while (snakeConsciousnessPlayerIterator.hasNext()) {
+            SnakeConsciousnessPlayer snakeConsciousnessPlayer = snakeConsciousnessPlayerIterator.next();
+            if(snakeCrossesBoard(snakeConsciousnessPlayer.getSnake()))
+            {
+                if(state.getPlayers().size() >= 2)
+                {
+                    toRemove.add(snakeConsciousnessPlayer);
+                }else
+                {
+                    if(state.getGameType() == GameTypre.SINLE)
+                    {
+                        state.setGameState(GameState.LOST);
+                        state.setLostState(new LostState(false,0));
+                    }else
+                    {
+
+                        if(state.getPlayers().size() > 1)
+                        {
+
+                        }
+
+                        // Multi
+                        state.setGameState(GameState.LOST);
+                        boolean firstLost =  snakeConsciousnessPlayer.getId() == 1;
+                        state.setLostState(new LostState(true,2));
+                    }
+                }
+            }
+        }
+        state.getPlayers().removeAll(toRemove);
+    }
+
+    private void iCrossedOtherSnake( ) {
+        List<SnakeConsciousnessPlayer> toRemove = new ArrayList<>();
+        for (SnakeConsciousness snakeConsciousness : state.getBots()) {
+
+            for(SnakeConsciousnessPlayer me: state.getPlayers()) {
+               if(snakeConsciousness.getSnake().colidesWithPoint(me.getSnake().getLocation())   == CollisionEnum.HEAD)
+               {
+                   toRemove.add(me);
+               }
+            }
+
+        }
+
+        for(SnakeConsciousnessPlayer otherPlayer: state.getPlayers()) {
+            for(SnakeConsciousnessPlayer me: state.getPlayers()) {
+                if(me.getId() == otherPlayer.getId()) {
+                    continue;
+                }
+                if(otherPlayer.getSnake().colidesWithPoint(me.getSnake().getLocation()) == CollisionEnum.HEAD)
+                {
+                    toRemove.add(me);
+                }
+            }
+        }
+
+
+        if(state.getGameType() == GameTypre.SINLE)
+        {
+            if(!toRemove.isEmpty())
+            {
+
+                state.setLostState(new LostState(false,0));
+                state.setGameState(GameState.LOST);
+            }
+        }else
+        {
+            if(toRemove.size() >= 2)
+            {
+                state.setLostState(new LostState(false,0));
+            }else if(toRemove.size() == 1)
+            {
+
+
+                if(state.getPlayers().size() == 1)
+                {
+
+                    state.setLostState(new LostState(true,(toRemove.get(0).getId() != 1)?1:2));
+                    state.setGameState(GameState.LOST);
+
+                }else
+                {
+                    state.getPlayers().removeAll(toRemove);
+                    state.getFruits().addAll(createFruitsBasedOnSnake(toRemove.get(0).getSnake(),GameSettings.FRUIT_INTERVAL));
+                }
+            }
+        }
+    }
 
     private void AIsnakesCrossEachOtherOrMe() {
-        Iterator<SnakeConsciousness> iterator = snakeConsciousnesses.iterator();
-
-
+        Iterator<SnakeConsciousness> iterator = state.getBots().iterator();
         List<SnakeConsciousness> toRemove = new ArrayList<>();
         while (iterator.hasNext()) {
             SnakeConsciousness snakeConsciousness = iterator.next();
-            if (snake.colidesWithPoint(snakeConsciousness.getSnake().getLocation()) == CollisionEnum.TAIL) {
-                fruits.addAll(createFruitsBasedOnSnake(snakeConsciousness.getSnake(), FRUIT_INTERVAL));
-                toRemove.add(snakeConsciousness);
-                continue;
+
+            for (SnakeConsciousness snake : state.getPlayers()) {
+                if (snake.getSnake().colidesWithPoint(snakeConsciousness.getSnake().getLocation()) == CollisionEnum.TAIL) {
+                    state.getFruits().addAll(createFruitsBasedOnSnake(snakeConsciousness.getSnake(), GameSettings.FRUIT_INTERVAL));
+                    toRemove.add(snakeConsciousness);
+                }
             }
 
-            for (SnakeConsciousness snakeConsciousnessTwo :
-                    snakeConsciousnesses) {
+            for (SnakeConsciousness snakeConsciousnessTwo : state.getBots()) {
 
                 if (snakeConsciousness.getSnake().getLocation().equals(snakeConsciousnessTwo.getSnake().getLocation()))
                     continue;
 
                 if (snakeConsciousnessTwo.getSnake().colidesWithPoint(snakeConsciousness.getSnake().getLocation()) == CollisionEnum.TAIL) {
-                    fruits.addAll(createFruitsBasedOnSnake(snakeConsciousness.getSnake(), FRUIT_INTERVAL));
+                    state.getFruits().addAll(createFruitsBasedOnSnake(snakeConsciousness.getSnake(), GameSettings.FRUIT_INTERVAL));
                     toRemove.add(snakeConsciousness);
                 }
 
             }
-
-
         }
-        snakeConsciousnesses.removeAll(toRemove);
+        state.getBots().removeAll(toRemove);
 
     }
 
 
-
-
     private void AIsnakesDecide(long timestamp) {
 
-        for (int i = 0; i < snakeConsciousnesses.size(); i++) {
-            SnakeConsciousness snakeConsciousness = snakeConsciousnesses.get(i);
-            if(snakeConsciousness.getSnake().getNextTick() < timestamp)
-            {
-                snakeConsciousness.getSnake().moveTowardsVector(DirectionUtility.directionToVector(snakeConsciousness.move(fruits)));
-                snakeConsciousness.getSnake().setNextTick(timestamp+NORMAL_SPEED);
+        for (int i = 0; i < state.getBots().size(); i++) {
+            SnakeConsciousness snakeConsciousness = state.getBots().get(i);
+            if (snakeConsciousness.getSnake().getNextTick() < timestamp) {
+                snakeConsciousness.getSnake().moveTowardsVector(DirectionUtility.directionToVector(snakeConsciousness.move(state)));
+                snakeConsciousness.getSnake().setNextTick(timestamp + GameSettings.NORMAL_SPEED);
             }
         }
     }
@@ -227,7 +253,7 @@ public class Board {
      * @return true if snake has lost
      */
     public boolean snakeCrossesBoard(Snake snake) {
-        return pointCrossesBoard(snake.getLocation(), boardSize);
+        return pointCrossesBoard(snake.getLocation(), state.getBoardSize());
     }
 
     /**
@@ -238,38 +264,45 @@ public class Board {
     }
 
 
-
-
     public void anyOfSnakesEats() {
-        Iterator<Fruit> iterator = fruits.iterator();
+        Iterator<Fruit> iterator = state.getFruits().iterator();
         while (iterator.hasNext()) {
             Fruit fruit = iterator.next();
 
-            if (snake.colidesWithPoint(fruit.getLocation()) == CollisionEnum.HEAD) {
-                snake.incrementSize(fruit.getSize());
-                iterator.remove();
-            } else {
-                for (SnakeConsciousness snakeConsciousness : snakeConsciousnesses) {
-                    if (snakeConsciousness.getSnake().colidesWithPoint(fruit.getLocation()) == CollisionEnum.HEAD) {
-                        snakeConsciousness.getSnake().incrementSize(fruit.getSize());
-                        iterator.remove();
-                        break;
-                    }
+            boolean leave = false;
+            for (SnakeConsciousness player : state.getPlayers()) {
+
+
+                if (player.getSnake().colidesWithPoint(fruit.getLocation()) == CollisionEnum.HEAD) {
+                    player.getSnake().incrementSize(fruit.getSize());
+                    iterator.remove();
+                    leave = true;
                 }
 
             }
+            if (leave) {
+                continue;
+            }
+
+            for (SnakeConsciousness snakeConsciousness : state.getBots()) {
+                if (snakeConsciousness.getSnake().colidesWithPoint(fruit.getLocation()) == CollisionEnum.HEAD) {
+                    snakeConsciousness.getSnake().incrementSize(fruit.getSize());
+                    iterator.remove();
+                    break;
+                }
+            }
+
 
         }
     }
 
-
     public void AIanyOfConsiousnessLost() {
 
-        Iterator<SnakeConsciousness> iterator = snakeConsciousnesses.iterator();
+        Iterator<SnakeConsciousness> iterator = state.getBots().iterator();
         while (iterator.hasNext()) {
             SnakeConsciousness snakeConsciousness = iterator.next();
             if (snakeCrossesBoard(snakeConsciousness.getSnake())) {
-                fruits.addAll(createFruitsBasedOnSnake(snakeConsciousness.getSnake(), FRUIT_INTERVAL));
+                state.getFruits().addAll(createFruitsBasedOnSnake(snakeConsciousness.getSnake(), GameSettings.FRUIT_INTERVAL));
                 iterator.remove();
             }
         }
@@ -285,93 +318,30 @@ public class Board {
 
             fruits.add(new Fruit(new Point(snake.getLocation()), interval));
             for (int i = 0; i < snake.getTail().size(); i++) {
-
                 if ((i + 1) % interval == 0) {
                     fruits.add(new Fruit(new Point(snake.getTail().get(i)), interval));
 
                 }
             }
         }
-
         return fruits;
     }
 
 
-    public long getSpeed(long l){
-        if(turboRequest + TURBO_TIMEOUT > l){
-            return TURBO_SPEED;
-            }else
-        {
-            return NORMAL_SPEED;
-        }
-    }
-
-    public void setWantSpeed(long l) {
-        turboRequest = l;
-    }
-
-
-    public DirectionEnum filterAgainstPrevious(DirectionEnum direction)
-    {
-        if (DirectionUtility.getOpposite(direction).equals(previousDirection))
-        {
-            return previousDirection;
-        }else {
-            previousDirection = (direction);
+    public DirectionEnum filterAgainstPrevious(DirectionEnum direction, SnakeConsciousness snake) {
+        if (DirectionUtility.getOpposite(direction).equals(snake.getPrevious())) {
+            return snake.getPrevious();
+        } else {
+            snake.setPrevious(direction);
             return direction;
         }
     }
 
-
-
-
-    public Snake getSnake() {
-        return snake;
+    public KeyboardState getKeysOne() {
+        return keysOne;
     }
 
-    public void setSnake(Snake snake) {
-        this.snake = snake;
+    public KeyboardState getKeysTwo() {
+        return keysTwo;
     }
-
-    public LinkedList<SnakeConsciousness> getSnakeConsciousnesses() {
-        return snakeConsciousnesses;
-    }
-
-    public void setSnakeConsciousnesses(LinkedList<SnakeConsciousness> snakeConsciousnesses) {
-        this.snakeConsciousnesses = snakeConsciousnesses;
-    }
-
-    public LinkedList<Fruit> getFruits() {
-        return fruits;
-    }
-
-    public void setFruits(LinkedList<Fruit> fruits) {
-        this.fruits = fruits;
-    }
-
-    public Point getBoardSize() {
-        return boardSize;
-    }
-
-    public void setBoardSize(Point boardSize) {
-        this.boardSize = boardSize;
-    }
-
-    public DirectionEnum getDirectionEnum() {
-        return directionEnum;
-    }
-
-    public void setDirectionEnum(DirectionEnum directionEnum) {
-        this.directionEnum = directionEnum;
-    }
-
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
-
 }

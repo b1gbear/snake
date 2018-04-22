@@ -5,6 +5,7 @@ import com.mono.snake.game.entityEnum.GameState;
 import com.mono.snake.game.graphics.Scenes.*;
 import com.mono.snake.game.graphics.listener.MenuListener;
 import com.mono.snake.game.logic.Board;
+import com.mono.snake.game.logic.entity.BoardState;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -30,11 +31,11 @@ public class Graphics {
     private final MenuListener menuListener;
     private final KeyAdapter keyListener;
 
-    public Graphics(Window window, Point size, Board board, GameState gameState, MenuListener menuListener, KeyAdapter keyListener) {
+    public Graphics(Window window, Point size, BoardState state, GameState gameState, MenuListener menuListener, KeyAdapter keyListener) {
         this.keyListener = keyListener;
         this.window = window;
-        this.graphicBoard = new GraphicBoard(size, board, wWidth, wHeight,menuListener);
-        this.lostBoard = new LostBoard(wWidth, wHeight,menuListener);
+        this.graphicBoard = new GraphicBoard(size, state, wWidth, wHeight,menuListener);
+        this.lostBoard = new LostBoard(wWidth, wHeight,menuListener,state);
         this.menuBoard = new MenuBoard(wWidth, wHeight,menuListener);
         this.pauseBoard = new PauseBoard(wWidth, wHeight,menuListener);
         this.helpBoard = new HelpBoard(wWidth, wHeight,menuListener);

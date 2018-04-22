@@ -1,6 +1,7 @@
 package com.mono.snake.game.graphics.Scenes;
 
 import com.mono.snake.game.graphics.listener.MenuListener;
+import com.mono.snake.game.logic.entity.BoardState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +13,11 @@ public class LostBoard extends JPanel implements ActionListener {
     private final int width;
     private final int height;
     private final MenuListener menuListener;
+    private final BoardState boardState;
 
-    public LostBoard(int width, int height, MenuListener menuListener) {
+
+    public LostBoard(int width, int height, MenuListener menuListener, BoardState state) {
+        this.boardState = state;
         this.menuListener = menuListener;
         this.width = width;
         this.height = height;

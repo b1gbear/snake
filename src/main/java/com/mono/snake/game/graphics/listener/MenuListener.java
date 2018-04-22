@@ -38,14 +38,14 @@ public class MenuListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
-        if (action.equals("Zacznij od nowa")) {
-            menuActions.addLast(MenuAction.START_GAME);
+        if (action.equals("Zacznij grę multiplayer!")) {
+            menuActions.addLast(MenuAction.START_GAME_MULTI);
         }
         else if (action.equals("Powrót do menu")) {
             menuActions.addLast(MenuAction.GO_MENU);
 
-        }else if (action.equals("Zacznij grę!")) {
-            menuActions.addLast(MenuAction.START_GAME);
+        }else if (action.equals("Zacznij grę singleplayer!")) {
+            menuActions.addLast(MenuAction.START_GAME_SINGLE);
         }
         else if (action.equals("Wyjscie")) {
             menuActions.addLast(MenuAction.EXIT);

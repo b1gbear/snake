@@ -7,7 +7,9 @@ import com.mono.snake.game.entityEnum.GameState;
 import com.mono.snake.game.graphics.entity.GraphicPoint;
 import com.mono.snake.game.graphics.listener.MenuListener;
 import com.mono.snake.game.logic.Board;
+import com.mono.snake.game.logic.entity.BoardState;
 import com.mono.snake.game.snake_consciousness.SnakeConsciousness;
+import com.mono.snake.game.snake_consciousness.SnakeConsciousnessPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,12 +29,12 @@ public class GraphicBoard extends JPanel implements ActionListener {
     ArrayList<ArrayList<GraphicPoint>> points;
 
     private Point size;
-    private Board board;
+    private BoardState state;
     private final MenuListener menulistener;
 
-    public GraphicBoard(Point size, Board board, int wWidth, int wHeight, MenuListener menuListener) {
+    public GraphicBoard(Point size, BoardState state, int wWidth, int wHeight, MenuListener menuListener) {
         this.menulistener = menuListener;
-        this.board = board;
+        this.state = state;
         this.size = size;
         this.wHeight = wHeight;
         this.wWidth = wWidth;
@@ -80,16 +82,16 @@ public class GraphicBoard extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         resetScreen();
-        doDrawing(g,board);
+        doDrawing(g,state);
     }
 
-    public void doDrawing(Graphics g,Board board) {
+    public void doDrawing(Graphics g,BoardState state) {
 
-        for(Fruit fruit:board.getFruits()) {
+        for(Fruit fruit:state.getFruits()) {
             points.get( fruit.getLocation().getY()).get( fruit.getLocation().getX()).changeColor(Color.GREEN);
         }
 
-        for (SnakeConsciousness snakeConsciousness:board.getSnakeConsciousnesses()){
+        for (SnakeConsciousness snakeConsciousness:state.getBots()){
             Snake snake = snakeConsciousness.getSnake();
             points.get(snake.getLocation().getY()).get( snake.getLocation().getX()).changeColor(Color.BLACK);
 
@@ -100,13 +102,23 @@ public class GraphicBoard extends JPanel implements ActionListener {
 
         }
 
-        for (Point point : board.getSnake().getTail()) {
-           points.get( point.getY()).get( point.getX()).changeColor(Color.CYAN);
+        for(SnakeConsciousnessPlayer player: state.getPlayers()) {
+            if(player.getId() == 1)
+            {
+                for (Point point : player.getSnake().getTail()) {
+                    points.get( point.getY()).get( point.getX()).changeColor(Color.CYAN);
+                }
+                points.get(player.getSnake().getLocation().getY()).get( player.getSnake().getLocation().getX()).changeColor(Color.blue);
+
+
+            }else
+            {
+                for (Point point : player.getSnake().getTail()) {
+                    points.get( point.getY()).get( point.getX()).changeColor(Color.RED);
+                }
+                points.get(player.getSnake().getLocation().getY()).get( player.getSnake().getLocation().getX()).changeColor(Color.ORANGE);
+            }
         }
-
-        points.get(board.getSnake().getLocation().getY()).get( board.getSnake().getLocation().getX()).changeColor(Color.blue);
-
-
 
 
         Toolkit.getDefaultToolkit().sync();

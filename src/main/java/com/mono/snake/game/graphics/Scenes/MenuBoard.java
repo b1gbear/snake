@@ -27,11 +27,13 @@ public class MenuBoard extends JPanel implements ActionListener {
         this.menuListener = menuListener;
 
         // Create buttons and add action listener
-        JButton start = new JButton("Zacznij grę!");
+        JButton starts = new JButton("Zacznij grę multiplayer!");
+        JButton startm = new JButton("Zacznij grę singleplayer!");
         JButton help = new JButton("Pomoc");
         JButton exit = new JButton("Wyjscie");
 
-        start.addActionListener(menuListener);
+        starts.addActionListener(menuListener);
+        startm.addActionListener(menuListener);
         exit.addActionListener(menuListener);
         help.addActionListener(menuListener);
 
@@ -42,7 +44,8 @@ public class MenuBoard extends JPanel implements ActionListener {
         this.add(jLabel);
         // Add buttons
 
-        this.add(start);
+        this.add(starts);
+        this.add(startm);
         this.add(help);
         this.add(exit);
 
