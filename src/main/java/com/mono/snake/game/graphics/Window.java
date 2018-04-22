@@ -10,8 +10,8 @@ public class Window extends JFrame{
     public Window()
     {
         this.setTitle("Snake");
-        this.setSize(600,600);
-        this.setResizable(false);
+        this.setSize(900,900);
+        this.setResizable(true);
         this.setLayout(new GridLayout(0, 1));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

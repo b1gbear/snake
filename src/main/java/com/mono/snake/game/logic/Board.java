@@ -60,7 +60,6 @@ public class Board {
      * Executes one games tick
      */
     public void tick(Long timestamp) {
-        System.out.println("1");
         iKeyboardMove();
         iSnakeMove(timestamp);
         iCrossedBoard();
@@ -128,11 +127,9 @@ public class Board {
             if (snakeCrossesBoard(snakeConsciousnessPlayer.getSnake())) {
 
                     if (state.getGameType() == GameTypre.SINLE) {
-                        System.out.println("single");
                         state.setGameState(GameState.LOST);
                         state.setLostState(new LostState(false, 0));
                     } else /* Multiplayer */ {
-                        System.out.println("multi");
                         state.setGameState(GameState.LOST);
                         int winnerIs = snakeConsciousnessPlayer.getId() == 1 ? 2 : 1;
                         state.setLostState(new LostState(true, winnerIs));

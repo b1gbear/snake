@@ -25,8 +25,8 @@ public class Graphics {
 
     private GameState currentGameState;
 
-    private final static int wWidth = 600;
-    private final static int wHeight = 600;
+    private final static int wWidth = 1024;
+    private final static int wHeight = 800;
 
     private final MenuListener menuListener;
     private final KeyAdapter keyListener;

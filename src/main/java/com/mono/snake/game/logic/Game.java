@@ -56,7 +56,7 @@ public class Game {
     final private Point size;
 
     public Game(Window window) {
-        this.size = new Point(50, 50);
+        this.size = new Point(80, 80);
         this.directionEnums = new ConcurrentLinkedDeque<>();
         this.gameKeyListener = new KeyboardKeyListener(directionEnums);
         this.menuListener = new MenuListener();
@@ -80,18 +80,18 @@ public class Game {
                 if (board.getState().getGameState() == GameState.PAUSE) {
                     continue;
                 }
-                if (val % 30 == 0) {
+                if (val % 24 == 0) {
                     board.getState().getFruits().add(
                             new Fruit(new Point(
                                     randomWithRange(0, size.getX() - 2),
                                     randomWithRange(0, size.getY() - 2))
                                     , 1));
                 }
-                if (val % 100 == 0) {
+                if (val % 70 == 0) {
                     board.getState().getBots().add(
                             new SnakeConsciousnessAI(new Snake(new Point(
-                                    randomWithRange(0, size.getX() - 1),
-                                    randomWithRange(0, size.getY() - 1))
+                                    randomWithRange(0, size.getX() ),
+                                    randomWithRange(0, size.getY() ))
                             ))
                     );
                 }
@@ -107,35 +107,25 @@ public class Game {
         while (!gameKeyListener.getKeyEnums().isEmpty()) {
             KeyEnum keyEnum =  gameKeyListener.getKeyEnums().removeFirst();
             if(keyEnum == KeyEnum.W){
-                board.getKeysOne().setTickSet(timestamp);
                 board.getKeysOne().setDirection(DirectionEnum.UP);
             }else if (keyEnum == KeyEnum.A){
-                board.getKeysOne().setTickSet(timestamp);
                 board.getKeysOne().setDirection(DirectionEnum.LEFT);
             }else if (keyEnum == KeyEnum.S){
-                board.getKeysOne().setTickSet(timestamp);
                 board.getKeysOne().setDirection(DirectionEnum.DOWN);
             }else if (keyEnum == KeyEnum.D){
-                board.getKeysOne().setTickSet(timestamp);
                 board.getKeysOne().setDirection(DirectionEnum.RIGHT);
             }else if (keyEnum == KeyEnum.SPEED_LEFT) {
-                board.getKeysOne().setTickSet(timestamp);
                 board.getKeysOne().setTurboRequestedAt(timestamp);
 
             }else if(keyEnum == KeyEnum.UP){
-                board.getKeysTwo().setTickSet(timestamp);
                 board.getKeysTwo().setDirection(DirectionEnum.UP);
             }else if (keyEnum == KeyEnum.LEFT){
-                board.getKeysTwo().setTickSet(timestamp);
                 board.getKeysTwo().setDirection(DirectionEnum.LEFT);
             }else if (keyEnum == KeyEnum.RIGHT){
-                board.getKeysTwo().setTickSet(timestamp);
                 board.getKeysTwo().setDirection(DirectionEnum.RIGHT);
             }else if (keyEnum == KeyEnum.DOWN){
-                board.getKeysTwo().setTickSet(timestamp);
                 board.getKeysTwo().setDirection(DirectionEnum.DOWN);
             }else if (keyEnum == KeyEnum.SPEED_RIGT) {
-                board.getKeysTwo().setTickSet(timestamp);
                 board.getKeysTwo().setTurboRequestedAt(timestamp);
             }else if (keyEnum == KeyEnum.ESC) {
                 board.getState().setGameState(GameState.PAUSE);
