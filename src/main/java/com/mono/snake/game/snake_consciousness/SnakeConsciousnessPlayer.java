@@ -61,17 +61,24 @@ public class SnakeConsciousnessPlayer implements  SnakeConsciousness {
 
     @Override
     public MovementType getSpeed(long timestamp) {
+
+
+        if(snake.getSize() <= 1)
+            return MovementType.Normal;
+
         MovementType movementType = (turboData.getTurboRequest() + GameSettings.TURBO_TIMEOUT > timestamp) ? MovementType.Turbo : MovementType.Normal;
 
         if(movementType == MovementType.Turbo && turboData.getMovementType() == MovementType.Turbo)
         {
-            long delta = timestamp-getTurboData().getLastTurbo() - timestamp;
+            long delta = timestamp -getTurboData().getLastTurbo();
             turboData.setTurboPenalty(turboData.getTurboPenalty()+delta);
         }
 
         if(movementType == MovementType.Turbo) {
             turboData.setLastTurbo(timestamp);
         }
+
+        turboData.setMovementType(movementType);
 
         return movementType;
     }

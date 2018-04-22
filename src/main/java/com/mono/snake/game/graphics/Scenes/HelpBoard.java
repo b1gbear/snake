@@ -32,13 +32,15 @@ public class HelpBoard extends JPanel implements ActionListener {
         JLabel jLabel = new JLabel("Pomoc");
         jLabel.setHorizontalAlignment(JLabel.CENTER);
         this.add(jLabel);
-        JLabel helpText = new JLabel("Aby sprintować naciśnij SPACJĘ, Poruszaj się strzałkami, unikaj wrogich węży.");
-        JLabel helpText2 = new JLabel("Nacisnij ESC aby zapauzować, lub wyjść.");
+        JLabel helpText = new JLabel(
+                "<html>Gra snake. Tryby: multiplayer i singleplayer<br>"+
+        "Gracz 1: Poruszaj się WASD oraz przyspieszaj V.<br>"+
+        "Gracz 2: Poruszaj się sztrzałkami oraz przyspieszaj M.<br>"+
+       "Nacisnij ESC aby zapauzować, lub wyjść.<br><br></html>" );
         helpText.setHorizontalAlignment(JLabel.CENTER);
-        helpText2.setHorizontalAlignment(JLabel.CENTER);
+
 
         this.add(helpText);
-        this.add(helpText2);
         this.add(menu);
 
         this.setVisible(true);

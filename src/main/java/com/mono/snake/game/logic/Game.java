@@ -76,7 +76,7 @@ public class Game {
         while (true) {
             handleMenuListener();
             if (board.getState().getGameState() == GameState.GAME) {
-                handleKeyboard(start);
+                handleKeyboard(System.currentTimeMillis()-start);
                 if (board.getState().getGameState() == GameState.PAUSE) {
                     continue;
                 }
@@ -103,29 +103,40 @@ public class Game {
         }
     }
 
-    private void handleKeyboard(long start) {
+    private void handleKeyboard(long timestamp) {
         while (!gameKeyListener.getKeyEnums().isEmpty()) {
             KeyEnum keyEnum =  gameKeyListener.getKeyEnums().removeFirst();
             if(keyEnum == KeyEnum.W){
+                board.getKeysOne().setTickSet(timestamp);
                 board.getKeysOne().setDirection(DirectionEnum.UP);
             }else if (keyEnum == KeyEnum.A){
+                board.getKeysOne().setTickSet(timestamp);
                 board.getKeysOne().setDirection(DirectionEnum.LEFT);
             }else if (keyEnum == KeyEnum.S){
+                board.getKeysOne().setTickSet(timestamp);
                 board.getKeysOne().setDirection(DirectionEnum.DOWN);
             }else if (keyEnum == KeyEnum.D){
+                board.getKeysOne().setTickSet(timestamp);
                 board.getKeysOne().setDirection(DirectionEnum.RIGHT);
             }else if (keyEnum == KeyEnum.SPEED_LEFT) {
-                board.getKeysOne().setTurboRequestedAt(start);
+                board.getKeysOne().setTickSet(timestamp);
+                board.getKeysOne().setTurboRequestedAt(timestamp);
+
             }else if(keyEnum == KeyEnum.UP){
+                board.getKeysTwo().setTickSet(timestamp);
                 board.getKeysTwo().setDirection(DirectionEnum.UP);
             }else if (keyEnum == KeyEnum.LEFT){
+                board.getKeysTwo().setTickSet(timestamp);
                 board.getKeysTwo().setDirection(DirectionEnum.LEFT);
             }else if (keyEnum == KeyEnum.RIGHT){
+                board.getKeysTwo().setTickSet(timestamp);
                 board.getKeysTwo().setDirection(DirectionEnum.RIGHT);
             }else if (keyEnum == KeyEnum.DOWN){
+                board.getKeysTwo().setTickSet(timestamp);
                 board.getKeysTwo().setDirection(DirectionEnum.DOWN);
             }else if (keyEnum == KeyEnum.SPEED_RIGT) {
-                board.getKeysTwo().setTurboRequestedAt(start);
+                board.getKeysTwo().setTickSet(timestamp);
+                board.getKeysTwo().setTurboRequestedAt(timestamp);
             }else if (keyEnum == KeyEnum.ESC) {
                 board.getState().setGameState(GameState.PAUSE);
             }

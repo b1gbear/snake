@@ -18,16 +18,10 @@ public class LostState {
         return multiplayer;
     }
 
-    public void setMultiplayer(boolean multiplayer) {
-        this.multiplayer = multiplayer;
-    }
 
 
     public int getWinnerIs() {
         return winnerIs;
     }
 
-    public void setWinnerIs(int winnerIs) {
-        this.winnerIs = winnerIs;
-    }
 }

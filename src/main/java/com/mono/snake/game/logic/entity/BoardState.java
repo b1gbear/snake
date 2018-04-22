@@ -3,6 +3,7 @@ package com.mono.snake.game.logic.entity;
 import com.mono.snake.game.entity.Fruit;
 import com.mono.snake.game.entity.Point;
 import com.mono.snake.game.entity.Snake;
+import com.mono.snake.game.entityEnum.DirectionEnum;
 import com.mono.snake.game.entityEnum.GameState;
 import com.mono.snake.game.entityEnum.GameTypre;
 import com.mono.snake.game.snake_consciousness.SnakeConsciousness;
@@ -64,10 +65,19 @@ public class BoardState {
         bots.clear();
         players.clear();
         fruits.clear();
-        players.add(new SnakeConsciousnessPlayer(new Snake(new Point(4,4)),1) );
+
+
+
+
+
+
+        players.add(new SnakeConsciousnessPlayer(new Snake(new Point(10,10)),1 ));
         if(gameType == GameTypre.MULTI)
         {
-            players.add(new SnakeConsciousnessPlayer(new Snake(new Point(4,4)),2) );
+
+            SnakeConsciousnessPlayer secondSnake =new SnakeConsciousnessPlayer( new Snake(new Point(boardSize.getX()-10,boardSize.getY()-10)),2);
+            secondSnake.setDirection(DirectionEnum.LEFT);
+            players.add(secondSnake);
         }
     }
 

@@ -56,14 +56,17 @@ public class KeyboardKeyListener extends KeyAdapter {
             keyEnums.add(KeyEnum.ENTER);
         } else if (key == KeyEvent.VK_M) {
             keyEnums.add(KeyEnum.SPEED_RIGT);
+
+
+
         } else if (key == KeyEvent.VK_W) {
-            keyEnums.add(KeyEnum.UP);
+            keyEnums.add(KeyEnum.W);
         } else if (key == KeyEvent.VK_S) {
-            keyEnums.add(KeyEnum.DOWN);
+            keyEnums.add(KeyEnum.S);
         } else if (key == KeyEvent.VK_A) {
-            keyEnums.add(KeyEnum.LEFT);
+            keyEnums.add(KeyEnum.A);
         } else if (key == KeyEvent.VK_D) {
-            keyEnums.add(KeyEnum.RIGHT);
+            keyEnums.add(KeyEnum.D);
         } else if (key == KeyEvent.VK_V) {
             keyEnums.add(KeyEnum.SPEED_LEFT);
         }

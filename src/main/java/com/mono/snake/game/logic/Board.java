@@ -42,6 +42,8 @@ public class Board {
 
 
     public void startNewGame(GameTypre gameType) {
+        keysOne.setDirection(DirectionEnum.RIGHT);
+        keysTwo.setDirection(DirectionEnum.LEFT);
         state.setGameState(GameState.GAME);
         state.reset(gameType);
         addAI();
@@ -58,56 +60,62 @@ public class Board {
      * Executes one games tick
      */
     public void tick(Long timestamp) {
+        System.out.println("1");
         iKeyboardMove();
         iSnakeMove(timestamp);
         iCrossedBoard();
+        if(state.getGameState() == GameState.LOST)
+            return;
         iCrossedOtherSnake();
+        if(state.getGameState() == GameState.LOST)
+            return;
         AIsnakesDecide(timestamp);
-        AIanyOfConsiousnessLost();
+        AIcrossedBoard();
         AIsnakesCrossEachOtherOrMe();
         anyOfSnakesEats();
     }
 
+
+
     private void iKeyboardMove() {
 
-        if(GameTypre.SINLE == state.getGameType())
-        {
-            KeyboardState keyboardState = keysOne.getTickSet() > keysTwo.getTickSet() ? keysOne : keysTwo;
+        if (GameTypre.SINLE == state.getGameType()) {
+
+            KeyboardState keyboardState =  keysOne ;
             SnakeConsciousnessPlayer player = state.getPlayers().get(0);
 
-            if(player.getId() == 1)
-            {
+            if (player.getId() == 1) {
                 player.setDirection(keyboardState.getDirection());
                 player.getTurboData().setTurboRequest(keyboardState.getTurboRequestedAt());
             }
 
-        }else
-        {
-            for (SnakeConsciousnessPlayer player:
-                 state.getPlayers()) {
-
-                if(player.getId() == 1)
-                {
-                    player.setDirection(keysOne.getDirection());
-                    player.getTurboData().setTurboRequest(keysOne.getTurboRequestedAt());
-                }else
-                {
-                    player.setDirection(keysTwo.getDirection());
-                    player.getTurboData().setTurboRequest(keysTwo.getTurboRequestedAt());
+        } else {
+            for (SnakeConsciousnessPlayer player : state.getPlayers()) {
+                    KeyboardState keyboardState = (player.getId() == 1)?keysOne:keysTwo;
+                    player.setDirection(keyboardState.getDirection());
+                    player.getTurboData().setTurboRequest(keyboardState.getTurboRequestedAt());
                 }
 
             }
-        }
+
     }
 
     private void iSnakeMove(long timestamp) {
 
         for (SnakeConsciousnessPlayer snakeMe : state.getPlayers()) {
-            if(snakeMe.getNextTick() > timestamp){
-                snakeMe.move(state);
-                long tick = snakeMe.getSpeed(timestamp) == MovementType.Turbo ? GameSettings.TURBO_SPEED : GameSettings.NORMAL_SPEED;
-                snakeMe.setNextTick(tick);
+
+
+            long tick = snakeMe.getSpeed(timestamp) == MovementType.Turbo ? GameSettings.TURBO_SPEED : GameSettings.NORMAL_SPEED;
+            if (snakeMe.getNextTick() + tick < timestamp) {
+                snakeMe.getSnake().moveTowardsVector(DirectionUtility.directionToVector(snakeMe.move(state)));
+                snakeMe.setNextTick(timestamp);
             }
+        }
+
+        for (SnakeConsciousnessPlayer snakeMe : state.getPlayers()) {
+
+            snakeMe.executePenalty();
+
         }
 
     }
@@ -117,90 +125,77 @@ public class Board {
         Iterator<SnakeConsciousnessPlayer> snakeConsciousnessPlayerIterator = state.getPlayers().iterator();
         while (snakeConsciousnessPlayerIterator.hasNext()) {
             SnakeConsciousnessPlayer snakeConsciousnessPlayer = snakeConsciousnessPlayerIterator.next();
-            if(snakeCrossesBoard(snakeConsciousnessPlayer.getSnake()))
-            {
-                if(state.getPlayers().size() >= 2)
-                {
-                    toRemove.add(snakeConsciousnessPlayer);
-                }else
-                {
-                    if(state.getGameType() == GameTypre.SINLE)
-                    {
+            if (snakeCrossesBoard(snakeConsciousnessPlayer.getSnake())) {
+
+                    if (state.getGameType() == GameTypre.SINLE) {
+                        System.out.println("single");
                         state.setGameState(GameState.LOST);
-                        state.setLostState(new LostState(false,0));
-                    }else
-                    {
-
-                        if(state.getPlayers().size() > 1)
-                        {
-
-                        }
-
-                        // Multi
+                        state.setLostState(new LostState(false, 0));
+                    } else /* Multiplayer */ {
+                        System.out.println("multi");
                         state.setGameState(GameState.LOST);
-                        boolean firstLost =  snakeConsciousnessPlayer.getId() == 1;
-                        state.setLostState(new LostState(true,2));
+                        int winnerIs = snakeConsciousnessPlayer.getId() == 1 ? 2 : 1;
+                        state.setLostState(new LostState(true, winnerIs));
                     }
-                }
+
             }
         }
         state.getPlayers().removeAll(toRemove);
     }
 
-    private void iCrossedOtherSnake( ) {
+    private void iCrossedOtherSnake() {
         List<SnakeConsciousnessPlayer> toRemove = new ArrayList<>();
         for (SnakeConsciousness snakeConsciousness : state.getBots()) {
 
-            for(SnakeConsciousnessPlayer me: state.getPlayers()) {
-               if(snakeConsciousness.getSnake().colidesWithPoint(me.getSnake().getLocation())   == CollisionEnum.HEAD)
-               {
-                   toRemove.add(me);
-               }
+            for (SnakeConsciousnessPlayer me : state.getPlayers()) {
+                if (snakeConsciousness.getSnake().colidesWithPoint(me.getSnake().getLocation()) == CollisionEnum.TAIL) {
+                    toRemove.add(me);
+                }
             }
 
         }
 
-        for(SnakeConsciousnessPlayer otherPlayer: state.getPlayers()) {
-            for(SnakeConsciousnessPlayer me: state.getPlayers()) {
-                if(me.getId() == otherPlayer.getId()) {
+        for (SnakeConsciousnessPlayer otherPlayer : state.getPlayers()) {
+            for (SnakeConsciousnessPlayer me : state.getPlayers()) {
+                if (me.getId() == otherPlayer.getId()) {
                     continue;
                 }
-                if(otherPlayer.getSnake().colidesWithPoint(me.getSnake().getLocation()) == CollisionEnum.HEAD)
-                {
+                if (otherPlayer.getSnake().colidesWithPoint(me.getSnake().getLocation()) == CollisionEnum.TAIL) {
                     toRemove.add(me);
                 }
             }
         }
 
 
-        if(state.getGameType() == GameTypre.SINLE)
-        {
-            if(!toRemove.isEmpty())
-            {
+        if (state.getGameType() == GameTypre.SINLE) {
+            if (!toRemove.isEmpty()) {
 
-                state.setLostState(new LostState(false,0));
+                state.setLostState(new LostState(false, 0));
                 state.setGameState(GameState.LOST);
             }
-        }else
-        {
-            if(toRemove.size() >= 2)
-            {
-                state.setLostState(new LostState(false,0));
-            }else if(toRemove.size() == 1)
-            {
+        } else {
+            if (toRemove.size() >= 2) {
+                state.setGameState(GameState.LOST);
+                state.setLostState(new LostState(true, 0));
+            } else if (toRemove.size() == 1) {
 
 
-                if(state.getPlayers().size() == 1)
-                {
 
-                    state.setLostState(new LostState(true,(toRemove.get(0).getId() != 1)?1:2));
-                    state.setGameState(GameState.LOST);
+//                if (state.getPlayers().size() == 1) {
+//
+//                    state.setLostState(new LostState(true, (toRemove.get(0).getId() != 1) ? 1 : 2));
+//                    state.setGameState(GameState.LOST);
+//
+//                } else {
+//                    state.getPlayers().removeAll(toRemove);
+//                    state.getFruits().addAll(createFruitsBasedOnSnake(toRemove.get(0).getSnake(), GameSettings.FRUIT_INTERVAL));
+//                }
 
-                }else
-                {
-                    state.getPlayers().removeAll(toRemove);
-                    state.getFruits().addAll(createFruitsBasedOnSnake(toRemove.get(0).getSnake(),GameSettings.FRUIT_INTERVAL));
-                }
+               SnakeConsciousnessPlayer snakeConsciousnessPlayer = toRemove.get(0);
+               state.setGameState(GameState.LOST);
+               state.setLostState(new LostState(true,snakeConsciousnessPlayer.getId() == 1?2:1));
+
+
             }
         }
     }
@@ -296,7 +291,7 @@ public class Board {
         }
     }
 
-    public void AIanyOfConsiousnessLost() {
+    public void AIcrossedBoard() {
 
         Iterator<SnakeConsciousness> iterator = state.getBots().iterator();
         while (iterator.hasNext()) {
@@ -325,16 +320,6 @@ public class Board {
             }
         }
         return fruits;
-    }
-
-
-    public DirectionEnum filterAgainstPrevious(DirectionEnum direction, SnakeConsciousness snake) {
-        if (DirectionUtility.getOpposite(direction).equals(snake.getPrevious())) {
-            return snake.getPrevious();
-        } else {
-            snake.setPrevious(direction);
-            return direction;
-        }
     }
 
     public KeyboardState getKeysOne() {
