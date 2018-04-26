@@ -1,7 +1,7 @@
 package com.mono.snake.game.logic.entity;
 
 /**
- * Board
+ * Lost state
  */
 public class LostState {
 

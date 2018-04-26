@@ -12,7 +12,7 @@ import com.mono.snake.game.snake_consciousness.SnakeConsciousnessPlayer;
 import java.util.LinkedList;
 
 /**
- * Board
+ * Board state
  */
 public class BoardState {
 
@@ -54,10 +54,16 @@ public class BoardState {
      */
     private GameTypre gameType;
 
-
+    /**
+     * Lost state
+     */
     private LostState lostState;
 
 
+    /**
+     * Reset Board State
+     * @param gameType Game Type
+     */
     public void reset(GameTypre gameType)
     {
         this.gameType = gameType;
@@ -65,12 +71,6 @@ public class BoardState {
         bots.clear();
         players.clear();
         fruits.clear();
-
-
-
-
-
-
         players.add(new SnakeConsciousnessPlayer(new Snake(new Point(10,10)),1 ));
         if(gameType == GameTypre.MULTI)
         {

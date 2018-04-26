@@ -3,6 +3,7 @@ package com.mono.snake.game.entity;
 import com.mono.snake.game.entityEnum.CollisionEnum;
 import com.mono.snake.game.entityEnum.DirectionEnum;
 import com.mono.snake.game.logic.Board;
+import com.mono.snake.game.utility.DirectionUtility;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -45,7 +46,7 @@ public class SnakeTest {
             snake.getTail().addLast(new Point(8,10));
             snake.getTail().addLast(new Point(7,10));
             snake.setSize(4);
-            snake.moveTowardsVector(Board.directionToVector(DirectionEnum.UP));
+            snake.moveTowardsVector(DirectionUtility.directionToVector(DirectionEnum.UP));
 
             Assert.assertEquals(new Point(10,9),snake.getLocation());
             Assert.assertEquals(new Point(10,10),snake.getTail().getFirst());
@@ -73,6 +74,16 @@ public class SnakeTest {
         Assert.assertEquals(1,snake.getSize());
         snake.incrementSize(4);
         Assert.assertEquals(5,snake.getSize());
+
+    }
+
+    @Test
+    public void decrementSizeTest(){
+        Snake snake = new Snake(new Point(10,10));
+        snake.setSize(10);
+        Assert.assertEquals(10,snake.getSize());
+        snake.decrementSize(4);
+        Assert.assertEquals(6,snake.getSize());
 
     }
 

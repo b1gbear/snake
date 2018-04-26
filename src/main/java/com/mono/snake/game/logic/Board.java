@@ -39,13 +39,21 @@ public class Board {
     private final KeyboardState keysTwo;
 
 
-    public Board(BoardState boardStatea) {
-        this.state = boardStatea;
+    /**
+     * Board constructor
+     * @param boardState BoardState
+     */
+    public Board(BoardState boardState) {
+        this.state = boardState;
         this.keysOne = new KeyboardState();
         this.keysTwo = new KeyboardState();
     }
 
 
+    /**
+     * Start new game
+     * @param gameType Game Type (single/multi)
+     */
     public void startNewGame(GameTypre gameType) {
         keysOne.setDirection(DirectionEnum.RIGHT);
         keysTwo.setDirection(DirectionEnum.LEFT);
@@ -55,6 +63,9 @@ public class Board {
     }
 
 
+    /**
+     * ADD AI snakes
+     */
     public void addAI() {
         for (int i = 0; i < 5; i++) {
             this.state.getBots().add(new SnakeConsciousnessAI(new Snake(new Point(i, i))));
@@ -80,7 +91,9 @@ public class Board {
     }
 
 
-
+    /**
+     * Keyboard move
+     */
     private void iKeyboardMove() {
 
         if (GameTypre.SINLE == state.getGameType()) {
@@ -104,6 +117,10 @@ public class Board {
 
     }
 
+    /**
+     * MY snake moves
+     * @param timestamp Timestamp
+     */
     private void iSnakeMove(long timestamp) {
 
         for (SnakeConsciousnessPlayer snakeMe : state.getPlayers()) {
@@ -124,6 +141,9 @@ public class Board {
 
     }
 
+    /**
+     * I Crossed board
+     */
     private void iCrossedBoard() {
         List<SnakeConsciousnessPlayer> toRemove = new ArrayList<>();
         Iterator<SnakeConsciousnessPlayer> snakeConsciousnessPlayerIterator = state.getPlayers().iterator();
@@ -145,6 +165,9 @@ public class Board {
         state.getPlayers().removeAll(toRemove);
     }
 
+    /**
+     * I Crossed other snake
+     */
     private void iCrossedOtherSnake() {
         List<SnakeConsciousnessPlayer> toRemove = new ArrayList<>();
         for (SnakeConsciousness snakeConsciousness : state.getBots()) {
@@ -154,7 +177,6 @@ public class Board {
                     toRemove.add(me);
                 }
             }
-
         }
 
         for (SnakeConsciousnessPlayer otherPlayer : state.getPlayers()) {
@@ -168,7 +190,6 @@ public class Board {
             }
         }
 
-
         if (state.getGameType() == GameTypre.SINLE) {
             if (!toRemove.isEmpty()) {
 
@@ -180,28 +201,16 @@ public class Board {
                 state.setGameState(GameState.LOST);
                 state.setLostState(new LostState(true, 0));
             } else if (toRemove.size() == 1) {
-
-
-
-//                if (state.getPlayers().size() == 1) {
-//
-//                    state.setLostState(new LostState(true, (toRemove.get(0).getId() != 1) ? 1 : 2));
-//                    state.setGameState(GameState.LOST);
-//
-//                } else {
-//                    state.getPlayers().removeAll(toRemove);
-//                    state.getFruits().addAll(createFruitsBasedOnSnake(toRemove.get(0).getSnake(), GameSettings.FRUIT_INTERVAL));
-//                }
-
                SnakeConsciousnessPlayer snakeConsciousnessPlayer = toRemove.get(0);
                state.setGameState(GameState.LOST);
                state.setLostState(new LostState(true,snakeConsciousnessPlayer.getId() == 1?2:1));
-
-
             }
         }
     }
 
+    /**
+     * AI snakes crossed each other
+     */
     private void AIsnakesCrossEachOtherOrMe() {
         Iterator<SnakeConsciousness> iterator = state.getBots().iterator();
         List<SnakeConsciousness> toRemove = new ArrayList<>();
@@ -232,6 +241,10 @@ public class Board {
     }
 
 
+    /**
+     * AI Snakes decide
+     * @param timestamp Timestamp
+     */
     private void AIsnakesDecide(long timestamp) {
 
         for (int i = 0; i < state.getBots().size(); i++) {
@@ -244,23 +257,8 @@ public class Board {
     }
 
     /**
-     * Check if snake crosses board
-     *
-     * @param snake Snake
-     * @return true if snake has lost
+     * Any of snakes eats
      */
-    public boolean snakeCrossesBoard(Snake snake) {
-        return pointCrossesBoard(snake.getLocation(), state.getBoardSize());
-    }
-
-    /**
-     * Point crosses board
-     */
-    static boolean pointCrossesBoard(Point point, Point size) {
-        return point.getX() >= size.getX() || point.getX() < 0 || point.getY() >= size.getY() || point.getY() < 0;
-    }
-
-
     public void anyOfSnakesEats() {
         Iterator<Fruit> iterator = state.getFruits().iterator();
         while (iterator.hasNext()) {
@@ -293,8 +291,10 @@ public class Board {
         }
     }
 
+    /**
+     * AI crosses board
+     */
     public void AIcrossedBoard() {
-
         Iterator<SnakeConsciousness> iterator = state.getBots().iterator();
         while (iterator.hasNext()) {
             SnakeConsciousness snakeConsciousness = iterator.next();
@@ -306,8 +306,13 @@ public class Board {
 
     }
 
-
-    public List<Fruit> createFruitsBasedOnSnake(Snake snake, int interval) {
+    /**
+     * Create Fruits Based on snake
+     * @param snake Snake
+     * @param interval Interval > 0
+     * @return Fruit list
+     */
+    public static  List<Fruit> createFruitsBasedOnSnake(Snake snake, int interval) {
         List<Fruit> fruits = new ArrayList<>();
         if (snake.getSize() <= 1) {
             fruits.add(new Fruit(new Point(snake.getLocation()), 1));
@@ -322,6 +327,23 @@ public class Board {
             }
         }
         return fruits;
+    }
+
+    /**
+     * Check if snake crosses board
+     *
+     * @param snake Snake
+     * @return true if snake has lost
+     */
+    public boolean snakeCrossesBoard(Snake snake) {
+        return pointCrossesBoard(snake.getLocation(), state.getBoardSize());
+    }
+
+    /**
+     * Point crosses board
+     */
+    static boolean pointCrossesBoard(Point point, Point size) {
+        return point.getX() >= size.getX() || point.getX() < 0 || point.getY() >= size.getY() || point.getY() < 0;
     }
 
 

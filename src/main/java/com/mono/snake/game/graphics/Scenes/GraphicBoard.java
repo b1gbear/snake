@@ -89,6 +89,8 @@ public class GraphicBoard extends JPanel implements ActionListener {
     public void doDrawing(Graphics g,BoardState state) {
 
         for(Fruit fruit:state.getFruits()) {
+            if(fruit.getLocation().getX() < 0 || fruit.getLocation().getY() < 0)
+                continue;
             points.get( fruit.getLocation().getY()).get( fruit.getLocation().getX()).changeColor(Color.GREEN);
         }
 

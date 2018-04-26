@@ -9,6 +9,7 @@ import com.mono.snake.game.graphics.Window;
 import com.mono.snake.game.graphics.listener.KeyboardKeyListener;
 import com.mono.snake.game.graphics.listener.MenuListener;
 import com.mono.snake.game.logic.entity.BoardState;
+import com.mono.snake.game.logic.entity.GameSettings;
 import com.mono.snake.game.snake_consciousness.SnakeConsciousnessAI;
 
 import java.awt.event.KeyEvent;
@@ -51,8 +52,14 @@ public class Game {
      */
     final private Board board;
 
-    final private static int GAME_SPEED = 20;
+    /**
+     * Thread interval
+     */
+    final private static int GAME_SPEED = GameSettings.SLEEP_INTERVAL;
 
+    /**
+     * Size of board
+     */
     final private Point size;
 
     public Game(Window window) {
@@ -83,15 +90,15 @@ public class Game {
                 if (val % 24 == 0) {
                     board.getState().getFruits().add(
                             new Fruit(new Point(
-                                    randomWithRange(0, size.getX() - 2),
-                                    randomWithRange(0, size.getY() - 2))
-                                    , 1));
+                                    Math.max(0,randomWithRange(0, size.getX() -1 )),
+                                    Math.max(0,randomWithRange(0, size.getY() -1 ))
+                            ), 1));
                 }
                 if (val % 70 == 0) {
                     board.getState().getBots().add(
                             new SnakeConsciousnessAI(new Snake(new Point(
-                                    randomWithRange(0, size.getX() ),
-                                    randomWithRange(0, size.getY() ))
+                                    randomWithRange(0, size.getX() ) -1,
+                                    randomWithRange(0, size.getY() ) -1 )
                             ))
                     );
                 }
@@ -103,6 +110,10 @@ public class Game {
         }
     }
 
+    /**
+     * Handle keyboard
+     * @param timestamp Timestamp
+     */
     private void handleKeyboard(long timestamp) {
         while (!gameKeyListener.getKeyEnums().isEmpty()) {
             KeyEnum keyEnum =  gameKeyListener.getKeyEnums().removeFirst();
@@ -116,7 +127,6 @@ public class Game {
                 board.getKeysOne().setDirection(DirectionEnum.RIGHT);
             }else if (keyEnum == KeyEnum.SPEED_LEFT) {
                 board.getKeysOne().setTurboRequestedAt(timestamp);
-
             }else if(keyEnum == KeyEnum.UP){
                 board.getKeysTwo().setDirection(DirectionEnum.UP);
             }else if (keyEnum == KeyEnum.LEFT){
@@ -133,10 +143,12 @@ public class Game {
         }
     }
 
+    /**
+     * Handle menu listener
+     */
     private void handleMenuListener() {
         while (!menuListener.getMenuActions().isEmpty()) {
             MenuAction menuAction = menuListener.getMenuActions().removeFirst();
-
             if (menuAction == MenuAction.GO_MENU) {
                 board.getState().setGameState(GameState.MENU);
             } else if (menuAction == MenuAction.EXIT) {
@@ -152,7 +164,6 @@ public class Game {
             } else if (menuAction == MenuAction.HELP) {
                 board.getState().setGameState(GameState.HELP);
             }
-
         }
     }
 
@@ -168,6 +179,12 @@ public class Game {
         }
     }
 
+    /**
+     * Generate random
+     * @param min minimum
+     * @param max maximum
+     * @return
+     */
     static int randomWithRange(int min, int max) {
         int range = (max - min) + 1;
         return (int) (Math.random() * range) + min;

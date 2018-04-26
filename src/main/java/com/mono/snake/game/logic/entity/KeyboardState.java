@@ -2,15 +2,30 @@ package com.mono.snake.game.logic.entity;
 
 import com.mono.snake.game.entityEnum.DirectionEnum;
 
+/**
+ * Keyboard state
+ */
 public class KeyboardState {
+    /**
+     * Direction
+     */
     private DirectionEnum direction;
+    /**
+     * Turbo requested at
+     */
     private long turboRequestedAt;
+    /**
+     * Tick set (used for both arrows and WSAD handling)
+     */
     private long tickSet;
 
 
+    /**
+     * KeyboardState Constructor
+     */
     public KeyboardState() {
         this.direction = DirectionEnum.RIGHT;
-        this.turboRequestedAt = -200000;
+        this.turboRequestedAt = GameSettings.TURBO_TIMEOUT *(-10);
         this.tickSet = 0;
     }
 
