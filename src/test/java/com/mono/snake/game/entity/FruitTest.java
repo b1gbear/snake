@@ -13,6 +13,13 @@ public class FruitTest {
         Assert.assertEquals(3,fruit.getSize());
     }
 
+    @Test
+    public void simpleConstructorTest() {
+        Fruit fruit = new Fruit(5, 6, 3);
+        Assert.assertEquals(5,fruit.getLocation().getX());
+        Assert.assertEquals(6,fruit.getLocation().getY());
+        Assert.assertEquals(3,fruit.getSize());
+    }
 
     @Test
     public void getterSetterTest() {

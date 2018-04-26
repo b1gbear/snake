@@ -16,6 +16,18 @@ public class Fruit {
     }
 
     /**
+     * Fruit constructor
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param size Size
+     */
+    public Fruit(int x,int y, int size)
+    {
+        this.location = new Point(x,y);
+        this.size = size;
+    }
+
+    /**
      * Location of fruit
      */
     private Point location;
