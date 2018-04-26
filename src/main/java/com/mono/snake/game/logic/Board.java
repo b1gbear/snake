@@ -54,7 +54,7 @@ public class Board {
      * Start new game
      * @param gameType Game Type (single/multi)
      */
-    public void startNewGame(GameTypre gameType) {
+    public void startNewGame(GameType gameType) {
         keysOne.setDirection(DirectionEnum.RIGHT);
         keysTwo.setDirection(DirectionEnum.LEFT);
         state.setGameState(GameState.GAME);
@@ -96,7 +96,7 @@ public class Board {
      */
     private void iKeyboardMove() {
 
-        if (GameTypre.SINLE == state.getGameType()) {
+        if (GameType.SINGLE == state.getGameType()) {
 
             KeyboardState keyboardState =  keysOne ;
             SnakeConsciousnessPlayer player = state.getPlayers().get(0);
@@ -126,7 +126,7 @@ public class Board {
         for (SnakeConsciousnessPlayer snakeMe : state.getPlayers()) {
 
 
-            long tick = snakeMe.getSpeed(timestamp) == MovementType.Turbo ? GameSettings.TURBO_SPEED : GameSettings.NORMAL_SPEED;
+            long tick = snakeMe.getSpeed(timestamp) == MovementType.TURBO ? GameSettings.TURBO_SPEED : GameSettings.NORMAL_SPEED;
             if (snakeMe.getNextTick() + tick < timestamp) {
                 snakeMe.getSnake().moveTowardsVector(DirectionUtility.directionToVector(snakeMe.move(state)));
                 snakeMe.setNextTick(timestamp);
@@ -151,7 +151,7 @@ public class Board {
             SnakeConsciousnessPlayer snakeConsciousnessPlayer = snakeConsciousnessPlayerIterator.next();
             if (snakeCrossesBoard(snakeConsciousnessPlayer.getSnake())) {
 
-                    if (state.getGameType() == GameTypre.SINLE) {
+                    if (state.getGameType() == GameType.SINGLE) {
                         state.setGameState(GameState.LOST);
                         state.setLostState(new LostState(false, 0));
                     } else /* Multiplayer */ {
@@ -190,7 +190,7 @@ public class Board {
             }
         }
 
-        if (state.getGameType() == GameTypre.SINLE) {
+        if (state.getGameType() == GameType.SINGLE) {
             if (!toRemove.isEmpty()) {
 
                 state.setLostState(new LostState(false, 0));

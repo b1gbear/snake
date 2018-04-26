@@ -5,7 +5,6 @@ import com.mono.snake.game.entityEnum.KeyEnum;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -38,46 +37,43 @@ public class KeyboardKeyListener extends KeyAdapter {
      */
     @Override
     public void keyPressed(KeyEvent e) {
-        parsKeyCode(e.getKeyCode());
+        KeyEnum keyEnum = parsKeyCode(e.getKeyCode());
+        if(keyEnum != KeyEnum.NONE){
+            keyEnums.addLast(keyEnum);
+        }
+
 
     }
 
-    public void parsKeyCode(int key)
+    public static  KeyEnum parsKeyCode(int key)
     {
         if (key == KeyEvent.VK_LEFT) {
-            keyEnums.add(KeyEnum.LEFT);
+            return KeyEnum.LEFT;
         } else if (key == KeyEvent.VK_RIGHT) {
-            keyEnums.add(KeyEnum.RIGHT);
+            return KeyEnum.RIGHT;
         } else if (key == KeyEvent.VK_UP) {
-            keyEnums.add(KeyEnum.UP);
+            return KeyEnum.UP;
         } else if (key == KeyEvent.VK_DOWN) {
-            keyEnums.add(KeyEnum.DOWN);
+            return KeyEnum.DOWN;
         } else if (key == KeyEvent.VK_ENTER) {
-            keyEnums.add(KeyEnum.ENTER);
+            return KeyEnum.ENTER;
         } else if (key == KeyEvent.VK_M) {
-            keyEnums.add(KeyEnum.SPEED_RIGT);
-
-
-
+            return KeyEnum.SPEED_RIGHT;
         } else if (key == KeyEvent.VK_W) {
-            keyEnums.add(KeyEnum.W);
+            return KeyEnum.W;
         } else if (key == KeyEvent.VK_S) {
-            keyEnums.add(KeyEnum.S);
+            return KeyEnum.S;
         } else if (key == KeyEvent.VK_A) {
-            keyEnums.add(KeyEnum.A);
+            return KeyEnum.A;
         } else if (key == KeyEvent.VK_D) {
-            keyEnums.add(KeyEnum.D);
+            return KeyEnum.D;
         } else if (key == KeyEvent.VK_V) {
-            keyEnums.add(KeyEnum.SPEED_LEFT);
+            return KeyEnum.SPEED_LEFT;
+        } else if (key == KeyEvent.VK_ESCAPE) {
+           return KeyEnum.ESC;
         }
 
-
-        else if (key == KeyEvent.VK_ESCAPE) {
-            keyEnums.add(KeyEnum.ESC);
-        }
-
-
-
+        return KeyEnum.NONE;
     }
 
 

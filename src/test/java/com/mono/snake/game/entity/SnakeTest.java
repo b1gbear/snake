@@ -34,7 +34,7 @@ public class SnakeTest {
         Assert.assertEquals(1,snake.getTail().size());
 
         snake.setNextTick(333);
-        Assert.assertEquals(1,snake.getNextTick());
+        Assert.assertEquals(333,snake.getNextTick());
     }
 
 

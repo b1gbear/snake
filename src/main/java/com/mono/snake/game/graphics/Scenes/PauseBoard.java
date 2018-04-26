@@ -1,6 +1,7 @@
 package  com.mono.snake.game.graphics.Scenes;
 
 import com.mono.snake.game.graphics.listener.MenuListener;
+import com.mono.snake.game.graphics.translation.MenuQuestions;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,15 +24,15 @@ public class PauseBoard extends JPanel implements ActionListener {
         this.menuListener = menuListener;
 
         // Create buttons and add action listener
-        JButton start = new JButton("Wznów grę");
-        JButton exit = new JButton("Wyjscie do menu");
+        JButton start = new JButton(MenuQuestions.BT_RESUME_GAME);
+        JButton exit = new JButton(MenuQuestions.BT_GO_MENU);
 
         start.addActionListener(menuListener);
         exit.addActionListener(menuListener);
 
         // add JLabel
 
-        JLabel jLabel = new JLabel("Pauza");
+        JLabel jLabel = new JLabel(MenuQuestions.LB_PAUSE);
         jLabel.setHorizontalAlignment(JLabel.CENTER);
         this.add(jLabel);
         // Add buttons

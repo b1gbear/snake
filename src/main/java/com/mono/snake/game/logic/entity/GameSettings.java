@@ -11,19 +11,19 @@ public class GameSettings {
      */
     public static final int FRUIT_INTERVAL = 2;
     /**
-     * Normal snake speed
+     * NORMAL snake speed
      */
     public static final int NORMAL_SPEED = 100;
     /**
-     * Turbo speed
+     * TURBO speed
      */
     public static final int TURBO_SPEED = 60;
     /**
-     * Turbo timeout
+     * TURBO timeout
      */
     public static final int TURBO_TIMEOUT = 1000;
     /**
-     * Turbo consume per second
+     * TURBO consume per second
      */
     public static final double TURBO_CONSUME_PER_SECOND = 0.5;
     /**

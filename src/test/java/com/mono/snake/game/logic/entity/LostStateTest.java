@@ -1,6 +1,5 @@
 package com.mono.snake.game.logic.entity;
 
-import com.mono.snake.game.logic.Game;
 import org.junit.Assert;
 import org.junit.Test;
 

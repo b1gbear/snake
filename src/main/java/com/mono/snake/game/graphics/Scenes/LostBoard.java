@@ -1,6 +1,7 @@
 package com.mono.snake.game.graphics.Scenes;
 
 import com.mono.snake.game.graphics.listener.MenuListener;
+import com.mono.snake.game.graphics.translation.MenuQuestions;
 import com.mono.snake.game.logic.entity.BoardState;
 
 import javax.swing.*;
@@ -26,10 +27,10 @@ public class LostBoard extends JPanel implements ActionListener {
         this.setLayout(new GridLayout(9, 3));
         this.text = new JLabel("Uninitialized");
         this.text.setHorizontalAlignment(JLabel.CENTER);
-        JButton menu = new JButton("Powrót do menu");
+        JButton menu = new JButton(MenuQuestions.BT_GO_MENU);
         menu.addActionListener(menuListener);
 
-        JLabel jLabel = new JLabel("Koniec gry...");
+        JLabel jLabel = new JLabel(MenuQuestions.LB_GAME_OVER);
         jLabel.setHorizontalAlignment(JLabel.CENTER);
 
         this.add(jLabel);
@@ -48,16 +49,16 @@ public class LostBoard extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if(!this.boardState.getLostState().isMultiplayer()) {
-            this.text.setText("Przegrales...");
+            this.text.setText(MenuQuestions.LB_U_LOST);
         }else {
             if(this.boardState.getLostState().getWinnerIs() == 0) {
-                this.text.setText("Remis!");
+                this.text.setText(MenuQuestions.LB_DRAW);
 
             }else if (this.boardState.getLostState().getWinnerIs() == 1) {
-                this.text.setText("Wygral gracz pierwszy!");
+                this.text.setText(MenuQuestions.LB_1WIN);
 
             }else {
-                this.text.setText("Wygral gracz drugi!");
+                this.text.setText(MenuQuestions.LB_2WIN);
             }
         }
 

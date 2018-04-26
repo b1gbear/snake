@@ -31,18 +31,22 @@ public class Graphics {
     private final static int wWidth = 1024;
     private final static int wHeight = 800;
 
-    private final MenuListener menuListener;
-    private final KeyAdapter keyListener;
-
+    /**
+     * Graphics constructor
+     * @param window Window
+     * @param size Board size
+     * @param state  game state
+     * @param gameState Initial GameState
+     * @param menuListener Menu Listener
+     * @param keyListener Key Listener
+     */
     public Graphics(Window window, Point size, BoardState state, GameState gameState, MenuListener menuListener, KeyAdapter keyListener) {
-        this.keyListener = keyListener;
         this.window = window;
         this.graphicBoard = new GraphicBoard(size, state, wWidth, wHeight,menuListener);
         this.lostBoard = new LostBoard(wWidth, wHeight,menuListener,state);
         this.menuBoard = new MenuBoard(wWidth, wHeight,menuListener);
         this.pauseBoard = new PauseBoard(wWidth, wHeight,menuListener);
         this.helpBoard = new HelpBoard(wWidth, wHeight,menuListener);
-        this.menuListener = menuListener;
         window.setLayout(new BorderLayout());
         window.setSize(wWidth,wHeight);
         window.add(graphicBoard, BorderLayout.CENTER);
@@ -59,6 +63,11 @@ public class Graphics {
     }
 
 
+    /**
+     * Print game state
+     * Invoced by Game Class
+     * @param gameState Current GameState
+     */
     public void printGameState(GameState gameState) {
         if (gameState == currentGameState) {
             if (gameState == GameState.GAME) {
@@ -90,7 +99,6 @@ public class Graphics {
                 window.add(helpBoard);
             }
            window.pack();
-
            window.repaint();
 
         }

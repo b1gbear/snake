@@ -4,16 +4,16 @@ import com.mono.snake.game.entityEnum.MovementType;
 import com.mono.snake.game.logic.entity.GameSettings;
 
 /**
- * Turbo data
+ * TURBO data
  */
 public class TurboData {
 
     /**
-     * Turbo Data Constructor
+     * TURBO Data Constructor
      */
     public TurboData()
     {
-        this.movementType = MovementType.Normal;
+        this.movementType = MovementType.NORMAL;
         this.turboPenalty = 0;
         this.turboRequest = -GameSettings.TURBO_TIMEOUT * 10;
         this.lastTurbo = -GameSettings.TURBO_TIMEOUT * 10;
@@ -25,7 +25,7 @@ public class TurboData {
     private MovementType movementType;
 
     /**
-     * Turbo requested timestamp
+     * TURBO requested timestamp
      */
     private long turboRequest;
 
@@ -35,7 +35,7 @@ public class TurboData {
     private long lastTurbo;
 
     /**
-     * Turbo penalty
+     * TURBO penalty
      */
     private double turboPenalty;
 

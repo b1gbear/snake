@@ -11,7 +11,7 @@ public class KeyboardState {
      */
     private DirectionEnum direction;
     /**
-     * Turbo requested at
+     * TURBO requested at
      */
     private long turboRequestedAt;
     /**

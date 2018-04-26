@@ -5,7 +5,7 @@ import com.mono.snake.game.entity.Point;
 import com.mono.snake.game.entity.Snake;
 import com.mono.snake.game.entityEnum.DirectionEnum;
 import com.mono.snake.game.entityEnum.GameState;
-import com.mono.snake.game.entityEnum.GameTypre;
+import com.mono.snake.game.entityEnum.GameType;
 import com.mono.snake.game.snake_consciousness.SnakeConsciousness;
 import com.mono.snake.game.snake_consciousness.SnakeConsciousnessPlayer;
 
@@ -52,7 +52,7 @@ public class BoardState {
     /**
      * Current game state
      */
-    private GameTypre gameType;
+    private GameType gameType;
 
     /**
      * Lost state
@@ -64,7 +64,7 @@ public class BoardState {
      * Reset Board State
      * @param gameType Game Type
      */
-    public void reset(GameTypre gameType)
+    public void reset(GameType gameType)
     {
         this.gameType = gameType;
         gameState = GameState.GAME;
@@ -72,7 +72,7 @@ public class BoardState {
         players.clear();
         fruits.clear();
         players.add(new SnakeConsciousnessPlayer(new Snake(new Point(10,10)),1 ));
-        if(gameType == GameTypre.MULTI)
+        if(gameType == GameType.MULTI)
         {
 
             SnakeConsciousnessPlayer secondSnake =new SnakeConsciousnessPlayer( new Snake(new Point(boardSize.getX()-10,boardSize.getY()-10)),2);
@@ -121,11 +121,11 @@ public class BoardState {
         this.gameState = gameState;
     }
 
-    public GameTypre getGameType() {
+    public GameType getGameType() {
         return gameType;
     }
 
-    public void setGameType(GameTypre gameType) {
+    public void setGameType(GameType gameType) {
         this.gameType = gameType;
     }
 

@@ -9,14 +9,24 @@ import java.awt.*;
  */
 public class GraphicPoint extends JPanel {
 
-    public static Color DEFAULT_COLOR = Color.white;
+    /**
+     * Default color
+     */
+    public static final Color DEFAULT_COLOR = Color.white;
 
+    /**
+     * Graphic Point Constructor
+     */
     public GraphicPoint(){
         this.setBackground(DEFAULT_COLOR);
     }
 
-    public void changeColor(Color d){
-        this.setBackground(d);
+    /**
+     * Change color
+     * @param color Color to repaint
+     */
+    public void changeColor(Color color){
+        this.setBackground(color);
         this.repaint();
     }
 

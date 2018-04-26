@@ -3,10 +3,8 @@ package com.mono.snake.game.logic.entity;
 import com.mono.snake.game.entity.Fruit;
 import com.mono.snake.game.entity.Point;
 import com.mono.snake.game.entity.Snake;
-import com.mono.snake.game.entityEnum.DirectionEnum;
 import com.mono.snake.game.entityEnum.GameState;
-import com.mono.snake.game.entityEnum.GameTypre;
-import com.mono.snake.game.logic.Game;
+import com.mono.snake.game.entityEnum.GameType;
 import com.mono.snake.game.snake_consciousness.SnakeConsciousness;
 import com.mono.snake.game.snake_consciousness.SnakeConsciousnessAI;
 import com.mono.snake.game.snake_consciousness.SnakeConsciousnessPlayer;
@@ -41,24 +39,23 @@ public class BoardStateTest {
         Assert.assertEquals(new Point(10,10),boardState.getBoardSize());
 
         boardState.getPlayers().add(new SnakeConsciousnessPlayer(new Snake(new Point(1,1)),2));
-        boardState.getPlayers().add(new SnakeConsciousnessPlayer(new Snake(new Point(1,1)),2));
 
-        boardState.reset(GameTypre.MULTI);
-        Assert.assertEquals(GameTypre.MULTI,boardState.getGameType());
+        boardState.reset(GameType.MULTI);
+        Assert.assertEquals(GameType.MULTI,boardState.getGameType());
         Assert.assertEquals(2,boardState.getPlayers().size());
         Assert.assertTrue(boardState.getBots().isEmpty());
-        Assert.assertTrue(boardState.getPlayers().isEmpty());
+        Assert.assertEquals(2,boardState.getPlayers().size());
         Assert.assertTrue(boardState.getFruits().isEmpty());
 
         boardState.getPlayers().add(new SnakeConsciousnessPlayer(new Snake(new Point(1,1)),2));
         boardState.getPlayers().add(new SnakeConsciousnessPlayer(new Snake(new Point(1,1)),2));
 
 
-        boardState.reset(GameTypre.SINLE);
-        Assert.assertEquals(GameTypre.SINLE,boardState.getGameType());
+        boardState.reset(GameType.SINGLE);
+        Assert.assertEquals(GameType.SINGLE,boardState.getGameType());
         Assert.assertEquals(1,boardState.getPlayers().size());
         Assert.assertTrue(boardState.getBots().isEmpty());
-        Assert.assertTrue(boardState.getPlayers().isEmpty());
+        Assert.assertEquals(1,boardState.getPlayers().size());
         Assert.assertTrue(boardState.getFruits().isEmpty());
     }
 
@@ -78,8 +75,8 @@ public class BoardStateTest {
         boardState.setBoardSize(new Point(1,22));
         Assert.assertEquals(new Point(1,22),boardState.getBoardSize());
 
-        boardState.setGameType(GameTypre.MULTI);
-        Assert.assertEquals(GameTypre.MULTI,boardState.getGameType());
+        boardState.setGameType(GameType.MULTI);
+        Assert.assertEquals(GameType.MULTI,boardState.getGameType());
 
 
         LinkedList<SnakeConsciousness> bots = new LinkedList<>();
@@ -104,7 +101,7 @@ public class BoardStateTest {
         players.add(new SnakeConsciousnessPlayer(new Snake(new Point(11,22)),2));
         players.add(new SnakeConsciousnessPlayer(new Snake(new Point(11,22)),2));
         boardState.setPlayers(players);
-        Assert.assertEquals(5,boardState.getPlayers().size());
+        Assert.assertEquals(4,boardState.getPlayers().size());
     }
 
 }

@@ -12,7 +12,6 @@ import com.mono.snake.game.logic.entity.BoardState;
 import com.mono.snake.game.logic.entity.GameSettings;
 import com.mono.snake.game.snake_consciousness.SnakeConsciousnessAI;
 
-import java.awt.event.KeyEvent;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 
@@ -135,7 +134,7 @@ public class Game {
                 board.getKeysTwo().setDirection(DirectionEnum.RIGHT);
             }else if (keyEnum == KeyEnum.DOWN){
                 board.getKeysTwo().setDirection(DirectionEnum.DOWN);
-            }else if (keyEnum == KeyEnum.SPEED_RIGT) {
+            }else if (keyEnum == KeyEnum.SPEED_RIGHT) {
                 board.getKeysTwo().setTurboRequestedAt(timestamp);
             }else if (keyEnum == KeyEnum.ESC) {
                 board.getState().setGameState(GameState.PAUSE);
@@ -155,10 +154,10 @@ public class Game {
                 window.dispose();
                 System.exit(0);
             } else if (menuAction == MenuAction.START_GAME_SINGLE) {
-                board.startNewGame(GameTypre.SINLE);
+                board.startNewGame(GameType.SINGLE);
             }
             if (menuAction == MenuAction.START_GAME_MULTI) {
-                board.startNewGame(GameTypre.MULTI);
+                board.startNewGame(GameType.MULTI);
             } else if (menuAction == MenuAction.RESUME) {
                 board.getState().setGameState(GameState.GAME);
             } else if (menuAction == MenuAction.HELP) {

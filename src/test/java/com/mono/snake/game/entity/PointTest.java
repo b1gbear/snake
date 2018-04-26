@@ -39,26 +39,21 @@ public class PointTest {
 
     @Test
     public void equalsTest() {
-
         {
             Point one = new Point();
             Point two = new Point();
             Assert.assertEquals(one, two);
         }
-
         {
             Point one = new Point(1, 3);
             Point two = new Point(1, 3);
             Assert.assertEquals(one, two);
         }
-
-
         {
             Point one = new Point(1, 0);
             Point two = new Point();
             Assert.assertNotEquals(one, two);
         }
-
         {
             Point one = new Point(1, 3);
             Point two = new Point(1, 4);
@@ -75,20 +70,16 @@ public class PointTest {
             Point two = new Point();
             Assert.assertEquals(one.hashCode(), two.hashCode());
         }
-
         {
             Point one = new Point(1, 3);
             Point two = new Point(1, 3);
             Assert.assertEquals(one.hashCode(), two.hashCode());
         }
-
-
         {
             Point one = new Point(1, 0);
             Point two = new Point();
             Assert.assertNotEquals(one.hashCode(), two.hashCode());
         }
-
         {
             Point one = new Point(1, 3);
             Point two = new Point(1, 4);
@@ -124,9 +115,7 @@ public class PointTest {
 
         Assert.assertEquals(expected, first.add(second));
         Assert.assertEquals(expected, second.add(first));
-
     }
-
 
     @Test
     public void toStringTest(){

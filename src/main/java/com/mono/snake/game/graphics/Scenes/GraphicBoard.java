@@ -136,18 +136,4 @@ public class GraphicBoard extends JPanel implements ActionListener {
     }
 
 
-
-    private void gameOver(Graphics g) {
-
-        String msg = "Game Over";
-        Font small = new Font("Helvetica", Font.BOLD, 30);
-        FontMetrics metr = getFontMetrics(small);
-
-        g.setColor(Color.black);
-        g.setFont(small);
-        g.drawString(msg, (wWidth - metr.stringWidth(msg)) / 2, wHeight / 2);
-        g.drawString(msg, 10, 10);
-    }
-
-
 }

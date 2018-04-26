@@ -56,7 +56,7 @@ public class SnakeConsciousnessAI implements SnakeConsciousness {
 
     @Override
     public MovementType getSpeed(long timestamp) {
-        return (turboData.getTurboRequest() + GameSettings.TURBO_TIMEOUT > timestamp) ? MovementType.Turbo : MovementType.Normal;
+        return (turboData.getTurboRequest() + GameSettings.TURBO_TIMEOUT > timestamp) ? MovementType.TURBO : MovementType.NORMAL;
     }
 
     @Override

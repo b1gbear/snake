@@ -35,38 +35,38 @@ public class DirectionUtility {
      */
     public static DirectionEnum getOpposite(DirectionEnum directionEnum)
     {
-        if(directionEnum == DirectionEnum.RIGHT)
-        {
+        if(directionEnum == DirectionEnum.RIGHT) {
             return DirectionEnum.LEFT;
-        }else if(directionEnum == DirectionEnum.LEFT)
-        {
+        }else if(directionEnum == DirectionEnum.LEFT) {
             return DirectionEnum.RIGHT;
-        }else if(directionEnum == DirectionEnum.UP)
-        {
+        }else if(directionEnum == DirectionEnum.UP) {
             return DirectionEnum.DOWN;
-        }else if(directionEnum == DirectionEnum.DOWN)
-        {
+        }else if(directionEnum == DirectionEnum.DOWN) {
             return DirectionEnum.UP;
         }
         return DirectionEnum.NONE;
 
     }
 
-    /**
-     * Key to direction
-     * @return Direction
-     */
-    public static DirectionEnum keyToDirection(KeyEnum keyEnum) {
-        if(keyEnum == KeyEnum.DOWN) {
-            return DirectionEnum.DOWN;
-        }else if (keyEnum == KeyEnum.UP){
-            return DirectionEnum.UP;
-        }else if (keyEnum == KeyEnum.RIGHT) {
-            return DirectionEnum.RIGHT;
-        }else if (keyEnum == KeyEnum.LEFT) {
-            return DirectionEnum.LEFT;
-        }
-        return DirectionEnum.NONE;
-    }
+
+
+//
+//
+//    /**
+//     * Key to direction
+//     * @return Direction
+//     */
+//    public static DirectionEnum keyToDirection(KeyEnum keyEnum) {
+//        if(keyEnum == KeyEnum.DOWN || keyEnum == KeyEnum.S) {
+//            return DirectionEnum.DOWN;
+//        }else if (keyEnum == KeyEnum.UP || keyEnum == KeyEnum.W){
+//            return DirectionEnum.UP;
+//        }else if (keyEnum == KeyEnum.RIGHT || keyEnum == KeyEnum.D) {
+//            return DirectionEnum.RIGHT;
+//        }else if (keyEnum == KeyEnum.LEFT || keyEnum == KeyEnum.A) {
+//            return DirectionEnum.LEFT;
+//        }
+//        return DirectionEnum.NONE;
+//    }
 
 }

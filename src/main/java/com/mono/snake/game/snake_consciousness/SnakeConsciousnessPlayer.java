@@ -1,15 +1,11 @@
 package com.mono.snake.game.snake_consciousness;
 
-import com.mono.snake.game.entity.Fruit;
-import com.mono.snake.game.entity.Point;
 import com.mono.snake.game.entity.Snake;
 import com.mono.snake.game.entityEnum.DirectionEnum;
 import com.mono.snake.game.entityEnum.MovementType;
 import com.mono.snake.game.logic.entity.BoardState;
 import com.mono.snake.game.logic.entity.GameSettings;
 import com.mono.snake.game.utility.DirectionUtility;
-
-import java.util.LinkedList;
 
 /**
  * Snake consciousness class
@@ -70,17 +66,17 @@ public class SnakeConsciousnessPlayer implements  SnakeConsciousness {
 
 
         if(snake.getSize() <= 1)
-            return MovementType.Normal;
+            return MovementType.NORMAL;
 
-        MovementType movementType = (turboData.getTurboRequest() + GameSettings.TURBO_TIMEOUT > timestamp) ? MovementType.Turbo : MovementType.Normal;
+        MovementType movementType = (turboData.getTurboRequest() + GameSettings.TURBO_TIMEOUT > timestamp) ? MovementType.TURBO : MovementType.NORMAL;
 
-        if(movementType == MovementType.Turbo && turboData.getMovementType() == MovementType.Turbo)
+        if(movementType == MovementType.TURBO && turboData.getMovementType() == MovementType.TURBO)
         {
             long delta = timestamp -getTurboData().getLastTurbo();
             turboData.setTurboPenalty(turboData.getTurboPenalty()+delta);
         }
 
-        if(movementType == MovementType.Turbo) {
+        if(movementType == MovementType.TURBO) {
             turboData.setLastTurbo(timestamp);
         }
 

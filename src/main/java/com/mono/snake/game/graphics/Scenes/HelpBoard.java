@@ -1,6 +1,7 @@
 package com.mono.snake.game.graphics.Scenes;
 
 import com.mono.snake.game.graphics.listener.MenuListener;
+import com.mono.snake.game.graphics.translation.MenuQuestions;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,20 +24,17 @@ public class HelpBoard extends JPanel implements ActionListener {
         this.menuListener = menuListener;
 
         // Create buttons and add action listener
-        JButton menu = new JButton("Wyjscie do menu");
+        JButton menu = new JButton(MenuQuestions.BT_GO_MENU);
 
         menu.addActionListener(menuListener);
 
         // add JLabel
 
-        JLabel jLabel = new JLabel("Pomoc");
+        JLabel jLabel = new JLabel(MenuQuestions.LB_HELP);
         jLabel.setHorizontalAlignment(JLabel.CENTER);
         this.add(jLabel);
         JLabel helpText = new JLabel(
-                "<html>Gra snake. Tryby: multiplayer i singleplayer<br>"+
-        "Gracz 1: Poruszaj się WASD oraz przyspieszaj V.<br>"+
-        "Gracz 2: Poruszaj się sztrzałkami oraz przyspieszaj M.<br>"+
-       "Nacisnij ESC aby zapauzować, lub wyjść.<br><br></html>" );
+                MenuQuestions.HELP_INFO );
         helpText.setHorizontalAlignment(JLabel.CENTER);
 
 

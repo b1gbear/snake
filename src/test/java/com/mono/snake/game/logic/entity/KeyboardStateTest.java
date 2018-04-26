@@ -11,10 +11,9 @@ public class KeyboardStateTest {
     @Test
     public void constructorTest() {
         KeyboardState keyboardState = new KeyboardState();
-        Assert.assertEquals(0,keyboardState.getTurboRequestedAt());
+        Assert.assertEquals(GameSettings.TURBO_TIMEOUT*(-10),keyboardState.getTurboRequestedAt());
         Assert.assertEquals(DirectionEnum.RIGHT,keyboardState.getDirection());
         Assert.assertEquals(0,keyboardState.getTickSet());
-
     }
 
 }

@@ -3,6 +3,7 @@ package com.mono.snake.game.graphics.Scenes;
 import com.mono.snake.game.entity.Point;
 import com.mono.snake.game.entityEnum.GameState;
 import com.mono.snake.game.graphics.listener.MenuListener;
+import com.mono.snake.game.graphics.translation.MenuQuestions;
 import com.mono.snake.game.logic.Board;
 
 import javax.swing.*;
@@ -27,10 +28,10 @@ public class MenuBoard extends JPanel implements ActionListener {
         this.menuListener = menuListener;
 
         // Create buttons and add action listener
-        JButton starts = new JButton("Zacznij grę multiplayer!");
-        JButton startm = new JButton("Zacznij grę singleplayer!");
-        JButton help = new JButton("Pomoc");
-        JButton exit = new JButton("Wyjscie");
+        JButton starts = new JButton(MenuQuestions.BT_START_MULTI);
+        JButton startm = new JButton(MenuQuestions.BT_START_SINGLE);
+        JButton help = new JButton(MenuQuestions.BT_HELP);
+        JButton exit = new JButton(MenuQuestions.BT_EXIT);
 
         starts.addActionListener(menuListener);
         startm.addActionListener(menuListener);
@@ -39,7 +40,7 @@ public class MenuBoard extends JPanel implements ActionListener {
 
         // add JLabel
 
-        JLabel jLabel = new JLabel("Menu");
+        JLabel jLabel = new JLabel(MenuQuestions.LB_MENU);
         jLabel.setHorizontalAlignment(JLabel.CENTER);
         this.add(jLabel);
         // Add buttons

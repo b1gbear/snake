@@ -3,6 +3,7 @@ package com.mono.snake.game.graphics.listener;
 
 import com.mono.snake.game.entityEnum.KeyEnum;
 import com.mono.snake.game.entityEnum.MenuAction;
+import com.mono.snake.game.graphics.translation.MenuQuestions;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,22 +39,17 @@ public class MenuListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String action = e.getActionCommand();
-        if (action.equals("Zacznij grę multiplayer!")) {
+        if (action.equals(MenuQuestions.BT_START_MULTI)) {
             menuActions.addLast(MenuAction.START_GAME_MULTI);
-        }
-        else if (action.equals("Powrót do menu")) {
+        } else if (action.equals(MenuQuestions.BT_GO_MENU)) {
             menuActions.addLast(MenuAction.GO_MENU);
-
-        }else if (action.equals("Zacznij grę singleplayer!")) {
+        }else if (action.equals(MenuQuestions.BT_START_SINGLE)) {
             menuActions.addLast(MenuAction.START_GAME_SINGLE);
-        }
-        else if (action.equals("Wyjscie")) {
+        } else if (action.equals(MenuQuestions.BT_EXIT)) {
             menuActions.addLast(MenuAction.EXIT);
-        }else if (action.equals("Wznów grę")) {
+        }else if (action.equals(MenuQuestions.BT_RESUME_GAME)) {
             menuActions.addLast(MenuAction.RESUME);
-        }else if (action.equals("Wyjscie do menu")) {
-            menuActions.addLast(MenuAction.GO_MENU);
-        }else if (action.equals("Pomoc")) {
+        }else if (action.equals(MenuQuestions.BT_HELP)) {
             menuActions.addLast(MenuAction.HELP);
         }
 
