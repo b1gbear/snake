@@ -39,11 +39,12 @@ public class GraphicBoard extends JPanel implements ActionListener {
         this.wHeight = wHeight;
         this.wWidth = wWidth;
         this.points = new ArrayList<>();
-        initBoard();
+        initBoard(size);
     }
 
-    private void initBoard( ) {
+    private void initBoard(Point size ) {
         this.setLayout(new GridLayout(size.getY(),size.getX(),0,0));
+        this.removeAll();
 
         for(int i = 0 ; i < size.getX();i++)
         {
@@ -52,7 +53,7 @@ public class GraphicBoard extends JPanel implements ActionListener {
                 GraphicPoint graphicPoint = new GraphicPoint();
                 points.get(i).add(graphicPoint);
                 this.add(graphicPoint);
-            };
+            }
         }
 
 

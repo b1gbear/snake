@@ -24,6 +24,9 @@ public class SnakeConsciousnessAI implements SnakeConsciousness {
      */
     private TurboData turboData;
 
+    /**
+     * Direction Enum
+     */
     private DirectionEnum previous;
 
     /**

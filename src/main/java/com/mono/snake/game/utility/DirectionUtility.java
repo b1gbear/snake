@@ -4,7 +4,15 @@ import com.mono.snake.game.entity.Point;
 import com.mono.snake.game.entityEnum.DirectionEnum;
 import com.mono.snake.game.entityEnum.KeyEnum;
 
+/**
+ * Direction utility, holds some static methods related to directions
+ */
 public class DirectionUtility {
+    /**
+     * Get vector from direction
+     * @param directionEnum Direction
+     * @return Vector Point
+     */
     public static Point directionToVector(DirectionEnum directionEnum) {
 
         if (directionEnum == DirectionEnum.RIGHT) {
@@ -20,6 +28,11 @@ public class DirectionUtility {
         return new Point();
     }
 
+    /**
+     * Get opposite direction
+     * @param directionEnum Direction
+     * @return Opposite direction
+     */
     public static DirectionEnum getOpposite(DirectionEnum directionEnum)
     {
         if(directionEnum == DirectionEnum.RIGHT)

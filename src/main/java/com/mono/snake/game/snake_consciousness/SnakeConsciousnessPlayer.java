@@ -26,8 +26,14 @@ public class SnakeConsciousnessPlayer implements  SnakeConsciousness {
      */
     private TurboData turboData;
 
-
+    /**
+     * Current direction
+     */
     private DirectionEnum direction;
+
+    /**
+     * Previous direction
+     */
     private DirectionEnum previous;
 
     private long id;

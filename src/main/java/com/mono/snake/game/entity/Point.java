@@ -49,6 +49,11 @@ public class Point {
         return new Point(this.x +second.getX(),this.y+second.getY());
     }
 
+    /**
+     * Count distance from another point
+     * @param another Another point
+     * @return distance
+     */
     public double distance(Point another)
     {
         double xd = this.x - another.getX();

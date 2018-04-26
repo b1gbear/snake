@@ -1,23 +1,42 @@
 package com.mono.snake.game.snake_consciousness;
 
 import com.mono.snake.game.entityEnum.MovementType;
+import com.mono.snake.game.logic.entity.GameSettings;
 
+/**
+ * Turbo data
+ */
 public class TurboData {
 
+    /**
+     * Turbo Data Constructor
+     */
     public TurboData()
     {
         this.movementType = MovementType.Normal;
         this.turboPenalty = 0;
-        this.turboRequest = -2000000;
-        this.lastTurbo = -2000000;
+        this.turboRequest = -GameSettings.TURBO_TIMEOUT * 10;
+        this.lastTurbo = -GameSettings.TURBO_TIMEOUT * 10;
     }
 
+    /**
+     * Movement Type
+     */
     private MovementType movementType;
 
+    /**
+     * Turbo requested timestamp
+     */
     private long turboRequest;
 
+    /**
+     * Last turbo
+     */
     private long lastTurbo;
 
+    /**
+     * Turbo penalty
+     */
     private double turboPenalty;
 
 

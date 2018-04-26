@@ -11,6 +11,9 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyListener;
 
+/**
+ * Graphics
+ */
 public class Graphics {
 
     private Window window;

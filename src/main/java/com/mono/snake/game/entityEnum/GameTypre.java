@@ -1,8 +1,7 @@
 package com.mono.snake.game.entityEnum;
 
 /**
- * CoollisionEnum enum
- * Snake could be hit in tail, or head, or no at all.
+ * Type of game Single-, or Multi- player
  */
 public enum GameTypre {
    SINLE,MULTI
