@@ -23,7 +23,7 @@ public class FruitTest {
 
     @Test
     public void getterSetterTest() {
-        Fruit fruit = new Fruit(new Point(1, 2), 3);
+        Fruit fruit = new Fruit(1,2, 3);
 
         fruit.setLocation(new Point(11,22));
         Assert.assertEquals(new Point(11,22),fruit.getLocation());
